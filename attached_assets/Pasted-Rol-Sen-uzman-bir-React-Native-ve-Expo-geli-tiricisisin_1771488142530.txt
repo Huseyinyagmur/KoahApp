@@ -1,0 +1,67 @@
+Rol: Sen uzman bir React Native ve Expo geliştiricisisin. UI/UX detaylarına son derece önem veren, temiz ve modüler kod yazan birisin.
+
+Görev: KOAH hastaları için "KOAH EGZERSİZ" adında bir mobil uygulamanın prototipini geliştireceksin. Sana uygulamanın görsel tasarımını kelimelerle detaylıca anlatacağım. Bu tasarıma birebir uymanı ve aşağıda belirttiğim teknik gereksinimleri (navigasyon, veri akışı, state yönetimi) uygulamanı istiyorum.
+
+Teknik Yığın (Tech Stack):
+
+React Native (Expo CLI)
+
+React Navigation v6 (Native Stack)
+
+Sadece yerel (mock) veri kullanılacak.
+
+StyleSheet kullanılacak.
+
+Genel Tasarım Kuralları (Tüm ekranlar için):
+
+Header (Üst Menü): Tüm ekranların üstünde sabit bir header olmalı. Arka plan rengi koyu yeşil/teal (#009688). Ortada beyaz, kalın fontla "KOAH EGZERSİZ" yazmalı. Sağ tarafta profil ve kilit ikonları (veya bildirim zili) olmalı.
+
+Arka Plan: Ekranların genel arka planı çok açık gri (#F5F6F8) olmalı.
+
+İstenen Navigasyon Akışı ve Ekranlar (Toplam 3 Ekran):
+
+1. Ekran: DashboardScreen (Kontrol Paneli Ana Ekranı)
+
+Başlık: "Kontrol Paneli" (sol üstte, altında ince bir çizgi).
+
+Orta kısımda 2x2 ızgara (grid) şeklinde 4 adet istatistik kartı olmalı. Kartların köşeleri hafif oval olmalı.
+
+Kart 1 (Sol Üst): Arka plan açık mavi/turkuaz (#00BCD4). Ortada büyük beyaz puntoyla "14", altında "Toplam Eğitim Videosu". Kartın en alt kısmında daha koyu bir mavi şerit içinde "Yeni Video Ekle ->" yazısı. (Bu karta tıklanınca ExerciseListScreen'e gidilecek).
+
+Kart 2 (Sağ Üst): Arka plan yeşil (#4CAF50). Büyük beyaz punto "1", altında "Blog Yazısı". Alt koyu yeşil şeritte "Yeni Blok Yazısı Ekle ->".
+
+Kart 3 (Sol Alt): Arka plan turuncu (#FF9800). Büyük beyaz punto "0", altında "Kullanıcılar". Alt koyu turuncu şeritte "Yeni Kullanıcı Ekle ->".
+
+Kart 4 (Sağ Alt): Arka plan kırmızı (#F44336). Büyük beyaz punto "0", altında "Destek Talepleri". Alt koyu kırmızı şeritte "Talepleri Listele ->".
+
+2. Ekran: ExerciseListScreen (Egzersiz Listesi & Veri Akışı / Durum Yönetimi)
+
+Bu ekranda, egzersizlerin listelendiği bir yapı olacak.
+
+Mock Data: İçinde id, title, category (Nefes, Isınma vb.), duration ve imageUri olan en az 4 elemanlı bir mock veri dizisi oluştur.
+
+Durum Yönetimi (Zorunlu):
+
+Loading State: Ekran açıldığında veriler 1.5 saniye gecikmeli gelsin (setTimeout ile simüle et). Bu sırada ekranda ActivityIndicator ve "Egzersizler yükleniyor..." yazısı göster.
+
+Empty State: Üst kısma "Tümü", "Nefes", "Isınma" isimli 3 filtre butonu koy. Eğer filtrelenen kategoride veri yoksa (boş array dönerse) ekranda şık bir şekilde "Bu kategoride henüz egzersiz bulunmuyor." uyarısı göster.
+
+Error State: Kodun içine rastgele tetiklenen (örneğin %20 ihtimalle) bir hata simülasyonu ekle. Hata olursa "Bağlantı hatası oluştu" metni ve "Tekrar Dene" butonu çıkar.
+
+Listede bir elemana tıklandığında id parametresi ile ExerciseDetailScreen'e geçiş yapılsın.
+
+3. Ekran: ExerciseDetailScreen (Detay ve Modal Ekranı)
+
+Açılış Modalı: Bu ekran ilk açıldığında (useEffect ile), ekranı karartan ve ortada beyaz bir kutu çıkaran bir Modal tetiklensin. Modalın içinde kalın koyu gri yazıyla "Merhaba", altında "Hazırmıyız ?", ve en altta açık mavi renkli bir "OK" butonu olsun. OK'a basınca modal kapansın.
+
+Ekran İçeriği: >   * En üstte Header'ın hemen altında açık yeşil/turkuaz bir banner içinde "NEFES EGZERSİZİ - 2 - AKŞAM" yazsın.
+
+Altında bir video placeholder'ı (gri bir dikdörtgen, ortasında oynatma ikonu veya rastgele bir resim).
+
+Altında kalın fontla egzersiz başlığı: "Nefes egzersizi II ( Ayakta Olan )".
+
+Altında açıklama metni: "Bu egzersizi bir sandalyede oturarak yada ayakta yapabilirsiniz. Egzersizi 5 dakika süresince yapmanız tavsiye edilmektedir fakat başınız dönerse sonlandırınız."
+
+Ekranın en altında tam genişlikte açık kırmızı/mercan renginde (#FF8A65) "Son Egzersiz" yazan büyük bir buton olsun.
+
+Lütfen App.js dosyasını (Navigasyon yapısıyla) ve bu 3 ekranın kodunu, tek bir mesajda, mantıklı ve çalışır bileşenler halinde bana ver.
