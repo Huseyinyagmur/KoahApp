@@ -4,6 +4,10 @@ Bu proje, KOAH (Kronik Obstrüktif Akciğer Hastalığı) hastalarının yaşam 
 
 Kullanıcılar; karmaşık videolara ihtiyaç duymadan, nefes ve güçlendirme egzersizlerini adım adım görseller eşliğinde takip edebilir, hastalıkla ilgili bilgilendirici yazıları okuyabilir ve kendi gelişim süreçlerini profillerinden izleyebilirler.
 
+## 🎥 Uygulama Önizlemesi
+
+👉 **[Uygulamanın Çalışma Videosunu İzlemek İçin Buraya Tıklayın](https://youtu.be/YyXIy_bZ_O0?si=uRSq51oouKoZAsmT)**
+
 ## 🚀 Öne Çıkan Özellikler
 
 - **Kontrol Merkezi:** Tüm modüllere (Egzersizler, Blog, Profil, Destek) tek ekrandan hızlı erişim.
@@ -14,6 +18,6 @@ Kullanıcılar; karmaşık videolara ihtiyaç duymadan, nefes ve güçlendirme e
 ## 🛠️ Kullanılan Teknolojiler
 
 - **Framework:** React Native & Expo
-- **Navigasyon:** React Navigation v6
+- **Navigasyon:** React Navigation v6 (`@react-navigation/native-stack`)
 - **Veri Yönetimi:** Local Mock Data & React State (`useState`)
 - **Stil:** React Native `StyleSheet`
