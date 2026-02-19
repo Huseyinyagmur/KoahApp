@@ -5,32 +5,33 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/colors';
 
 interface AppHeaderProps {
+  title?: string;
   onBack?: () => void;
 }
 
-export default function AppHeader({ onBack }: AppHeaderProps) {
+export default function AppHeader({ title = 'KOAH KONTROL MERKEZİ', onBack }: AppHeaderProps) {
   const insets = useSafeAreaInsets();
-  const topPadding = Platform.OS === 'web' ? 20 : insets.top;
+  const topPadding = Platform.OS === 'web' ? 67 : insets.top;
 
   return (
     <View style={[styles.container, { paddingTop: topPadding }]}>
       <View style={styles.inner}>
         {onBack ? (
-          <Pressable onPress={onBack} style={styles.iconBtn} hitSlop={8}>
-            <Ionicons name="arrow-back" size={22} color={Colors.textWhite} />
+          <Pressable onPress={onBack} style={styles.backBtn} hitSlop={10}>
+            <Ionicons name="chevron-back" size={24} color={Colors.textWhite} />
           </Pressable>
         ) : (
-          <View style={styles.iconBtn} />
+          <View style={styles.backBtn} />
         )}
 
-        <Text style={styles.title}>KOAH EGZERSİZ</Text>
+        <Text style={styles.title} numberOfLines={1}>{title}</Text>
 
         <View style={styles.rightIcons}>
           <Pressable style={styles.iconBtn} hitSlop={8}>
-            <Ionicons name="person-circle-outline" size={24} color={Colors.textWhite} />
+            <Ionicons name="notifications-outline" size={22} color={Colors.textWhite} />
           </Pressable>
           <Pressable style={styles.iconBtn} hitSlop={8}>
-            <Ionicons name="lock-closed-outline" size={20} color={Colors.textWhite} />
+            <Ionicons name="person-circle-outline" size={24} color={Colors.textWhite} />
           </Pressable>
         </View>
       </View>
@@ -41,24 +42,37 @@ export default function AppHeader({ onBack }: AppHeaderProps) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.header,
+    shadowColor: Colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
   },
   inner: {
     height: 56,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
+  },
+  backBtn: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontFamily: 'Inter_700Bold',
-    fontSize: 18,
+    fontSize: 17,
     color: Colors.textWhite,
-    letterSpacing: 1,
+    letterSpacing: 0.5,
+    flex: 1,
+    textAlign: 'center',
   },
   rightIcons: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 8,
   },
   iconBtn: {
     width: 36,

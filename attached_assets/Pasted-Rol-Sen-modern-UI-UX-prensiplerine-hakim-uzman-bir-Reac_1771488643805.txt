@@ -1,0 +1,83 @@
+Rol: Sen modern UI/UX prensiplerine hakim, uzman bir React Native ve Expo geliştiricisisin.
+
+Görev: KOAH hastaları için, aşağıda belirteceğim yeni navigasyon akışına ve içerik yapısına sahip, modern bir mobil uygulama prototipi kodlayacaksın.
+
+Teknik Yığın (Tech Stack):
+
+React Native (Expo CLI)
+
+React Navigation v6 (Native Stack Navigator - Akış burada kritik)
+
+Veriler için kapsamlı bir yerel mock data dosyası ve useState.
+
+Stil için StyleSheet. Tasarım modern, temiz ve kart (card) tabanlı olmalı.
+
+Genel Tasarım Kuralları:
+
+Ana Renkler: Koyu Teal/Yeşil (#00897B) headerlar için, arka plan için çok açık gri (#F5F7F8), vurgular için turkuaz, turuncu ve yumuşak kırmızı.
+
+Header: Tüm iç ekranların üstünde (Welcome hariç) standart bir header olmalı: Koyu yeşil arka plan, beyaz "KOAH KONTROL MERKEZİ" (veya ilgili sayfa adı) başlığı.
+
+İstenen Navigasyon Akışı ve Ekran Detayları (Toplam 4 Ana Ekran):
+
+1. Ekran: WelcomeInfoScreen (Açılış ve Bilgilendirme - İlk Ekran)
+
+Uygulama açıldığında ilk bu ekran gelmeli. Header olmayacak.
+
+Tam ekran, temiz bir tasarım. Üstte büyük bir "Hoş Geldiniz" başlığı.
+
+Altında, KOAH egzersizlerinin önemini anlatan motive edici ve bilgilendirici bir metin bloğu (Örn: "Daha rahat nefes almak ve yaşam kalitenizi artırmak için hazırlanan egzersiz programınıza hoş geldiniz...").
+
+En altta, tüm genişliği kaplayan, dikkat çekici renkte (Örn: Turkuaz) bir buton: "Anladım, Kontrol Merkezine Git". Bu butona basınca DashboardScreen'e yönlendirilmeli.
+
+2. Ekran: DashboardScreen (Ana Kontrol Merkezi)
+
+Header başlığı: "Kontrol Merkezi".
+
+Bu ekran, uygulamanın ana hub'ıdır. Orta kısımda 2x2 ızgara (grid) yapısında 4 büyük, modern navigasyon kartı olmalı. Her kartta bir ikon ve altında başlık yer almalı:
+
+Sol Üst (Turkuaz Kart): İkon (Koşan adam/Akciğer), Başlık: "Egzersizler". (Tıklanınca ExerciseListScreen'e gider).
+
+Sağ Üst (Yeşil Kart): İkon (Kitap/Belge), Başlık: "Blog Yazıları". (Şimdilik tıklanınca bir Alert versin: "Yakında...").
+
+Sol Alt (Turuncu Kart): İkon (Kullanıcı/Profil), Başlık: "Profil / Kullanıcı Ekle". (Şimdilik tıklanınca Alert versin).
+
+Sağ Alt (Kırmızı Kart): İkon (Kulaklık/Soru işareti), Başlık: "Destek Talepleri". (Şimdilik tıklanınca Alert versin).
+
+3. Ekran: ExerciseListScreen (Genişletilmiş Egzersiz Listesi & Durumlar)
+
+Header başlığı: "Egzersiz Kütüphanesi".
+
+Mock Data (Önemli): Bu sefer çok daha fazla veri istiyorum. En az 12-15 farklı egzersiz içeren bir dizi oluştur. Her objede id, title, category (Nefes, Güçlendirme, Esneme, Rahatlama), duration ve bir imagePlaceholderColor olsun.
+
+Arayüz: Üstte kategori filtreleme butonları (Tümü, Nefes, Güçlendirme...). Altında FlatList veya SectionList kullanarak bu zengin veri setini listele. Kartlar modern ve tıklanabilir olsun. Tıklanınca ExerciseDetailScreen'e id ile gitsin.
+
+Durum Yönetimi:
+
+Loading: Açılışta 2 saniyelik ActivityIndicator simülasyonu.
+
+Error: %10 ihtimalle rastgele hata simülasyonu ve "Tekrar Dene" butonu.
+
+4. Ekran: ExerciseDetailScreen (Görsel ve Adımlı Anlatım - VİDEO YOK)
+
+Header başlığı: "Egzersiz Detayı".
+
+Veri Yapısı Değişikliği: Bu ekran için kullanılacak mock datadaki egzersiz objesinde artık videoUrl OLMAYACAK. Onun yerine şunlar olacak:
+
+mainImageUri: Egzersizin ana duruşunu gösteren büyük görsel (placeholder).
+
+steps: Egzersizin nasıl yapılacağını anlatan adım adım metin dizisi (Array of strings). Örn: ["1. Dik oturun.", "2. Burnunuzdan derin nefes alın.", "3. 4 saniye tutun."].
+
+Arayüz Tasarımı (Yukarıdan aşağıya):
+
+Egzersiz Başlığı ve Kategorisi (Rozet içinde).
+
+Büyük Ana Görsel Alanı (Ekranın 1/3'ünü kaplayan placeholder görüntü).
+
+"Nasıl Yapılır?" Alt Başlığı.
+
+Adımların Listesi: steps dizisindeki her adımı alt alta, numaralı ve okunaklı bir şekilde listele (Örn: Text bileşenleri içinde map ederek).
+
+En altta "Egzersizi Tamamla" butonu.
+
+Lütfen bu 4 ekranlı, modern navigasyon akışına sahip, video içermeyen, görsel ve metin odaklı React Native / Expo kodunun tamamını, gerekli App.js navigasyon ayarlarıyla birlikte, kopyalayıp çalıştırabileceğim şekilde bütünleşik olarak ver.

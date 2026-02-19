@@ -18,8 +18,9 @@ SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
       <Stack.Screen name="index" />
+      <Stack.Screen name="dashboard" />
       <Stack.Screen name="exercises" />
       <Stack.Screen name="exercise/[id]" />
     </Stack>

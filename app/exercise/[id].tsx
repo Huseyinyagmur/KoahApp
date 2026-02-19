@@ -6,71 +6,16 @@ import {
   Pressable,
   ScrollView,
   Modal,
+  Alert,
   Platform,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import AppHeader from '@/components/AppHeader';
 import Colors from '@/constants/colors';
-
-interface ExerciseDetail {
-  id: string;
-  title: string;
-  category: string;
-  duration: string;
-  bannerText: string;
-  description: string;
-}
-
-const EXERCISE_DETAILS: Record<string, ExerciseDetail> = {
-  '1': {
-    id: '1',
-    title: 'Nefes egzersizi I ( Oturarak )',
-    category: 'Nefes',
-    duration: '5 dk',
-    bannerText: 'NEFES EGZERSİZİ - 1 - SABAH',
-    description:
-      'Bu egzersizi bir sandalyede oturarak yapabilirsiniz. Egzersizi 5 dakika süresince yapmanız tavsiye edilmektedir fakat başınız dönerse sonlandırınız.',
-  },
-  '2': {
-    id: '2',
-    title: 'Nefes egzersizi II ( Ayakta Olan )',
-    category: 'Nefes',
-    duration: '5 dk',
-    bannerText: 'NEFES EGZERSİZİ - 2 - AKŞAM',
-    description:
-      'Bu egzersizi bir sandalyede oturarak yada ayakta yapabilirsiniz. Egzersizi 5 dakika süresince yapmanız tavsiye edilmektedir fakat başınız dönerse sonlandırınız.',
-  },
-  '3': {
-    id: '3',
-    title: 'Isınma Hareketleri I',
-    category: 'Isınma',
-    duration: '10 dk',
-    bannerText: 'ISINMA HAREKETLERİ - 1 - SABAH',
-    description:
-      'Bu egzersizi ayakta yapmanız gerekmektedir. Hareketleri yavaşça ve kontrollü bir şekilde gerçekleştirin. 10 dakika süresince tekrarlayınız.',
-  },
-  '4': {
-    id: '4',
-    title: 'Isınma Hareketleri II',
-    category: 'Isınma',
-    duration: '8 dk',
-    bannerText: 'ISINMA HAREKETLERİ - 2 - ÖĞLE',
-    description:
-      'Bu egzersiz serisini oturarak veya ayakta yapabilirsiniz. 8 dakika süresince yapmanız tavsiye edilmektedir.',
-  },
-  '5': {
-    id: '5',
-    title: 'Nefes egzersizi III ( Yatarak )',
-    category: 'Nefes',
-    duration: '7 dk',
-    bannerText: 'NEFES EGZERSİZİ - 3 - GECE',
-    description:
-      'Bu egzersizi yatarak yapmanız gerekmektedir. Derin ve kontrollü nefes alıp verin. 7 dakika süresince yapmanız tavsiye edilmektedir.',
-  },
-};
+import { EXERCISES, CATEGORY_COLORS } from '@/data/exercises';
 
 export default function ExerciseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -78,12 +23,13 @@ export default function ExerciseDetailScreen() {
   const bottomPadding = Platform.OS === 'web' ? 34 : insets.bottom;
   const [modalVisible, setModalVisible] = useState(false);
 
-  const exercise = EXERCISE_DETAILS[id || '2'] || EXERCISE_DETAILS['2'];
+  const exercise = EXERCISES.find((e) => e.id === id) || EXERCISES[0];
+  const catColor = CATEGORY_COLORS[exercise.category] || Colors.header;
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setModalVisible(true);
-    }, 300);
+    }, 400);
     return () => clearTimeout(timer);
   }, []);
 
@@ -94,57 +40,75 @@ export default function ExerciseDetailScreen() {
     setModalVisible(false);
   };
 
+  const handleComplete = () => {
+    if (Platform.OS !== 'web') {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }
+    Alert.alert(
+      'Tebrikler!',
+      'Egzersizi başarıyla tamamladınız.',
+      [{ text: 'Tamam', onPress: () => router.back() }]
+    );
+  };
+
   return (
     <View style={styles.screen}>
-      <AppHeader onBack={() => router.back()} />
+      <AppHeader title="Egzersiz Detayı" onBack={() => router.back()} />
 
       <ScrollView
         style={styles.scrollView}
-        contentContainerStyle={[styles.content, { paddingBottom: bottomPadding + 80 }]}
+        contentContainerStyle={[styles.content, { paddingBottom: bottomPadding + 90 }]}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.banner}>
-          <Text style={styles.bannerText}>{exercise.bannerText}</Text>
-        </View>
-
-        <View style={styles.videoPlaceholder}>
-          <View style={styles.playCircle}>
-            <Ionicons name="play" size={36} color={Colors.white} />
-          </View>
-        </View>
-
-        <View style={styles.detailSection}>
+        <View style={styles.titleSection}>
           <Text style={styles.exerciseTitle}>{exercise.title}</Text>
-
-          <View style={styles.metaRow}>
-            <View style={styles.metaItem}>
-              <Ionicons name="time-outline" size={16} color={Colors.header} />
-              <Text style={styles.metaText}>{exercise.duration}</Text>
+          <View style={styles.badgeRow}>
+            <View style={[styles.categoryBadge, { backgroundColor: catColor + '18' }]}>
+              <Text style={[styles.categoryText, { color: catColor }]}>{exercise.category}</Text>
             </View>
-            <View style={styles.metaItem}>
-              <Ionicons name="fitness-outline" size={16} color={Colors.header} />
-              <Text style={styles.metaText}>{exercise.category}</Text>
+            <View style={styles.durationBadge}>
+              <Ionicons name="time-outline" size={14} color={Colors.textSecondary} />
+              <Text style={styles.durationText}>{exercise.duration}</Text>
             </View>
           </View>
+        </View>
 
-          <Text style={styles.description}>{exercise.description}</Text>
+        <View style={[styles.mainImageArea, { backgroundColor: exercise.imagePlaceholderColor }]}>
+          <View style={styles.imageIconCircle}>
+            <MaterialCommunityIcons name="lungs" size={48} color={catColor} />
+          </View>
+          <Text style={styles.imageLabel}>{exercise.category} Egzersizi</Text>
+        </View>
+
+        <View style={styles.stepsSection}>
+          <View style={styles.stepsTitleRow}>
+            <View style={styles.stepsTitleIconCircle}>
+              <Ionicons name="list-outline" size={18} color={Colors.header} />
+            </View>
+            <Text style={styles.stepsTitle}>Nasıl Yapılır?</Text>
+          </View>
+
+          {exercise.steps.map((step, index) => (
+            <View key={index} style={styles.stepItem}>
+              <View style={[styles.stepNumber, { backgroundColor: catColor + '18' }]}>
+                <Text style={[styles.stepNumberText, { color: catColor }]}>{index + 1}</Text>
+              </View>
+              <Text style={styles.stepText}>{step.replace(/^\d+\.\s*/, '')}</Text>
+            </View>
+          ))}
         </View>
       </ScrollView>
 
       <View style={[styles.bottomBar, { paddingBottom: bottomPadding + 12 }]}>
         <Pressable
           style={({ pressed }) => [
-            styles.lastExerciseBtn,
-            { opacity: pressed ? 0.88 : 1 },
+            styles.completeBtn,
+            { opacity: pressed ? 0.9 : 1, transform: [{ scale: pressed ? 0.98 : 1 }] },
           ]}
-          onPress={() => {
-            if (Platform.OS !== 'web') {
-              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-            }
-          }}
+          onPress={handleComplete}
         >
-          <Ionicons name="checkmark-circle-outline" size={22} color={Colors.white} />
-          <Text style={styles.lastExerciseBtnText}>Son Egzersiz</Text>
+          <Ionicons name="checkmark-circle" size={22} color={Colors.white} />
+          <Text style={styles.completeBtnText}>Egzersizi Tamamla</Text>
         </Pressable>
       </View>
 
@@ -157,18 +121,21 @@ export default function ExerciseDetailScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
             <View style={styles.modalIconCircle}>
-              <Ionicons name="hand-right-outline" size={32} color={Colors.header} />
+              <Ionicons name="hand-right-outline" size={36} color={Colors.header} />
             </View>
             <Text style={styles.modalTitle}>Merhaba</Text>
             <Text style={styles.modalSubtitle}>Hazır mıyız ?</Text>
+            <Text style={styles.modalDesc}>
+              Egzersizi rahat bir ortamda, kendinizi zorlamadan yapın.
+            </Text>
             <Pressable
               style={({ pressed }) => [
                 styles.modalOkBtn,
-                { opacity: pressed ? 0.85 : 1 },
+                { opacity: pressed ? 0.85 : 1, transform: [{ scale: pressed ? 0.97 : 1 }] },
               ]}
               onPress={handleOk}
             >
-              <Text style={styles.modalOkText}>OK</Text>
+              <Text style={styles.modalOkText}>Başlayalım</Text>
             </Pressable>
           </View>
         </View>
@@ -188,63 +155,115 @@ const styles = StyleSheet.create({
   content: {
     paddingBottom: 100,
   },
-  banner: {
-    backgroundColor: Colors.bannerGreen,
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-  },
-  bannerText: {
-    fontFamily: 'Inter_700Bold',
-    fontSize: 15,
-    color: Colors.textWhite,
-    letterSpacing: 1,
-  },
-  videoPlaceholder: {
-    height: 220,
-    backgroundColor: '#263238',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  playCircle: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.4)',
-  },
-  detailSection: {
-    padding: 24,
+  titleSection: {
+    padding: 20,
+    paddingBottom: 12,
   },
   exerciseTitle: {
     fontFamily: 'Inter_700Bold',
-    fontSize: 20,
+    fontSize: 22,
     color: Colors.textPrimary,
     marginBottom: 12,
   },
-  metaRow: {
+  badgeRow: {
     flexDirection: 'row',
-    gap: 20,
-    marginBottom: 20,
+    gap: 10,
+    alignItems: 'center',
   },
-  metaItem: {
+  categoryBadge: {
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  categoryText: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 13,
+  },
+  durationBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
+    backgroundColor: Colors.white,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.divider,
   },
-  metaText: {
+  durationText: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 13,
+    color: Colors.textSecondary,
+  },
+  mainImageArea: {
+    marginHorizontal: 20,
+    height: 200,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  imageIconCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  imageLabel: {
     fontFamily: 'Inter_500Medium',
     fontSize: 14,
-    color: Colors.header,
+    color: 'rgba(0,0,0,0.4)',
   },
-  description: {
+  stepsSection: {
+    padding: 20,
+    paddingTop: 24,
+  },
+  stepsTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 18,
+  },
+  stepsTitleIconCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#E0F2F1',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepsTitle: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 18,
+    color: Colors.textPrimary,
+  },
+  stepItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 14,
+    gap: 12,
+  },
+  stepNumber: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 1,
+  },
+  stepNumberText: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 13,
+  },
+  stepText: {
     fontFamily: 'Inter_400Regular',
     fontSize: 15,
-    color: Colors.textSecondary,
-    lineHeight: 24,
+    color: Colors.textPrimary,
+    lineHeight: 22,
+    flex: 1,
   },
   bottomBar: {
     position: 'absolute',
@@ -257,16 +276,21 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: Colors.divider,
   },
-  lastExerciseBtn: {
-    backgroundColor: Colors.coralButton,
+  completeBtn: {
+    backgroundColor: Colors.completeButton,
     paddingVertical: 16,
-    borderRadius: 14,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
     gap: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 4,
   },
-  lastExerciseBtnText: {
+  completeBtnText: {
     fontFamily: 'Inter_700Bold',
     fontSize: 17,
     color: Colors.white,
@@ -279,12 +303,12 @@ const styles = StyleSheet.create({
   },
   modalBox: {
     backgroundColor: Colors.white,
-    borderRadius: 20,
+    borderRadius: 24,
     paddingVertical: 36,
-    paddingHorizontal: 40,
+    paddingHorizontal: 32,
     alignItems: 'center',
-    width: '80%',
-    maxWidth: 320,
+    width: '82%',
+    maxWidth: 340,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.15,
@@ -292,31 +316,39 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   modalIconCircle: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 72,
+    height: 72,
+    borderRadius: 36,
     backgroundColor: '#E0F2F1',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: 18,
   },
   modalTitle: {
     fontFamily: 'Inter_700Bold',
-    fontSize: 24,
+    fontSize: 26,
     color: Colors.textPrimary,
-    marginBottom: 6,
+    marginBottom: 4,
   },
   modalSubtitle: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 17,
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 18,
     color: Colors.textSecondary,
-    marginBottom: 28,
+    marginBottom: 12,
+  },
+  modalDesc: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 14,
+    color: Colors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 24,
   },
   modalOkBtn: {
     backgroundColor: Colors.modalBlue,
     paddingHorizontal: 48,
-    paddingVertical: 12,
-    borderRadius: 24,
+    paddingVertical: 14,
+    borderRadius: 28,
   },
   modalOkText: {
     fontFamily: 'Inter_700Bold',
