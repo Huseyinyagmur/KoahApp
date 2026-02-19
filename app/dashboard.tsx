@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
-  Alert,
   Platform,
 } from 'react-native';
 import { router } from 'expo-router';
@@ -55,10 +54,6 @@ export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const bottomPadding = Platform.OS === 'web' ? 34 : insets.bottom;
 
-  const showAlert = (msg: string) => {
-    Alert.alert('Bilgi', msg);
-  };
-
   const cards: NavCard[] = [
     {
       icon: 'lungs',
@@ -74,15 +69,15 @@ export default function DashboardScreen() {
       title: 'Blog Yazıları',
       subtitle: 'Sağlık ipuçları',
       bgColor: Colors.cardGreen,
-      onPress: () => showAlert('Blog bölümü yakında aktif olacak!'),
+      onPress: () => router.push('/blogs'),
     },
     {
       icon: 'person-outline',
       iconSet: 'ionicons',
       title: 'Profil',
-      subtitle: 'Hesap ayarları',
+      subtitle: 'İlerleme ve istatistikler',
       bgColor: Colors.cardOrange,
-      onPress: () => showAlert('Profil bölümü yakında aktif olacak!'),
+      onPress: () => router.push('/profile'),
     },
     {
       icon: 'headset-outline',
@@ -90,7 +85,7 @@ export default function DashboardScreen() {
       title: 'Destek Talepleri',
       subtitle: 'Yardım alın',
       bgColor: Colors.cardRed,
-      onPress: () => showAlert('Destek bölümü yakında aktif olacak!'),
+      onPress: () => router.push('/support'),
     },
   ];
 

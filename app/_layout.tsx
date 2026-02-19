@@ -23,6 +23,10 @@ function RootLayoutNav() {
       <Stack.Screen name="dashboard" />
       <Stack.Screen name="exercises" />
       <Stack.Screen name="exercise/[id]" />
+      <Stack.Screen name="blogs" />
+      <Stack.Screen name="blog/[id]" />
+      <Stack.Screen name="profile" />
+      <Stack.Screen name="support" />
     </Stack>
   );
 }
